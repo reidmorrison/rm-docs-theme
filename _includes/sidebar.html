@@ -1,0 +1,78 @@
+{% comment %}
+  The page navigation.
+
+  Replaces the row of seven to twelve .btn links the old layouts carried in the
+  header. That row could not hold twelve items on a phone, which is the bug
+  symmetric-encryption fixed and the other five doc sites still have; and even
+  on a desktop a flat row of twelve gives no sense of where you are in the set.
+
+  A sidebar takes twelve items without anyone having to decide which pages get
+  cut, and it groups them, so the shape of the documentation is visible before
+  a single page is opened. The second axis, headings within the current page,
+  is the kramdown {:toc} block every one of these pages already carries.
+
+  Two shapes are accepted in _config.yml. Grouped, for a site with enough pages
+  to have sections:
+
+      nav:
+        - group: Start here
+          items:
+            - { page: index.html, label: Overview }
+
+  Or flat, for a small site where grouping six pages would be ceremony:
+
+      nav:
+        - { page: index.html, label: Overview }
+
+  Which one is in use is detected from the first entry.
+
+  `page.name` is the source filename, so `api.md` here matches `api.html` in
+  config after the replace. That is the convention the old layouts used and it
+  is kept, so converting a site does not mean rewriting its page list.
+{% endcomment %}
+{%- assign current_page = page.name | replace: '.md', '.html' -%}
+{%- assign first_entry = site.nav | first -%}
+
+<aside class="sidebar">
+  {%- comment -%}
+    <details open> rather than a button and a class: native disclosure gives
+    keyboard support and correct semantics for free, and with JavaScript off
+    the nav stays open instead of stranded shut. The layout's script closes it
+    below the sidebar breakpoint. The summary is hidden above it by CSS.
+  {%- endcomment %}
+  <details class="nav" open>
+    <summary>Documentation</summary>
+    <nav class="nav-body" aria-label="Documentation pages">
+
+      {%- if first_entry.items -%}
+        {%- for group in site.nav %}
+        <div class="nav-group">
+          {%- if group.group %}
+          <p class="nav-group-title">{{ group.group }}</p>
+          {%- endif %}
+          <ul class="nav-list">
+            {%- for item in group.items %}
+            <li>
+              <a href="{{ item.page | relative_url }}"
+                 {%- if item.page == current_page %} class="active" aria-current="page"{% endif %}>{{ item.label }}</a>
+            </li>
+            {%- endfor %}
+          </ul>
+        </div>
+        {%- endfor %}
+      {%- else -%}
+        <div class="nav-group">
+          <ul class="nav-list">
+            {%- for item in site.nav %}
+            <li>
+              <a href="{{ item.page | relative_url }}"
+                 {%- if item.page == current_page %} class="active" aria-current="page"{% endif %}>{{ item.label }}</a>
+            </li>
+            {%- endfor %}
+          </ul>
+        </div>
+      {%- endif %}
+
+    </nav>
+  </details>
+</aside>

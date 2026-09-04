@@ -1,0 +1,45 @@
+# Config for previewing THIS repo on its own (`bundle exec jekyll serve`).
+#
+# None of it reaches a consuming site. Jekyll exposes only _layouts, _includes,
+# _sass and assets from a theme, so this file, index.md and the Gemfile are
+# preview scaffolding and stay here. That is also why the theme cannot ship
+# config defaults: every consuming site declares its own `project` and `nav`
+# blocks in full. See README.md, "Adopting the theme".
+
+title: rm-docs-theme
+url: https://reidmorrison.github.io
+baseurl: /rm-docs-theme
+
+# Must match the kramdown settings on every consuming site, or the preview
+# renders a different table of contents than production does.
+markdown: kramdown
+kramdown:
+  toc_levels: "2..3"
+
+# The block each consuming site fills in. The preview uses placeholder values.
+project:
+  name: RM Docs Theme
+  tagline: Shared look and feel
+  description: >-
+    The shared Jekyll theme for the reidmorrison.com documentation sites:
+    one palette, one type pairing, one syntax sheet, one sidebar.
+  github: reidmorrison/rm-docs-theme
+  license: Apache 2.0 License
+
+# Grouped form. A site with few enough pages may use the flat form instead;
+# _includes/sidebar.html accepts both and detects which from the first entry.
+nav:
+  - group: Start here
+    items:
+      - { page: index.html, label: Overview }
+  - group: Reference
+    items:
+      - { page: index.html, label: Second group }
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - CLAUDE.md
+  - LICENSE
+  - vendor

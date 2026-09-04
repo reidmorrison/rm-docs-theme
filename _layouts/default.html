@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-us' }}">
+
+{% include head.html %}
+
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  {% include masthead.html %}
+
+  <div class="shell">
+    {% include sidebar.html %}
+
+    <main class="content" id="content">
+      {{ content }}
+    </main>
+  </div>
+
+  {% include docs-footer.html %}
+
+  <script>
+    /* Three progressive enhancements. Every one of them degrades to something
+       usable with JavaScript off, which is why none of this is in the markup:
+
+       1. The sidebar ships as <details open>. Below the sidebar breakpoint it
+          is collapsed so twelve nav items do not push the article off the
+          screen. With JS off it stays open, which is long but correct.
+       2. Wide tables are wrapped so they scroll in their own box. Unwrapped
+          they would widen the grid column and scroll the page body sideways.
+          The markdown cannot do this itself; kramdown emits a bare <table>.
+       3. Headings get a hover anchor. kramdown already assigns every heading
+          an id, so this only surfaces what is there. */
+    (function () {
+      "use strict";
+
+      // 1 -------------------------------------------------- mobile nav ---
+      var nav = document.querySelector(".nav");
+      if (nav && window.matchMedia) {
+        // Must match the max-width in rm-docs.css section 4. Kept as a
+        // min-width query so the two are complements, not duplicates.
+        var wide = window.matchMedia("(min-width: 901px)");
+        var sync = function () { nav.open = wide.matches; };
+        sync();
+        // addEventListener on a MediaQueryList is the modern spelling;
+        // addListener is kept for older WebKit.
+        if (wide.addEventListener) { wide.addEventListener("change", sync); }
+        else if (wide.addListener) { wide.addListener(sync); }
+      }
+
+      // 2 ------------------------------------------------ table scroll ---
+      var tables = document.querySelectorAll(".content table");
+      for (var i = 0; i < tables.length; i++) {
+        var table = tables[i];
+        if (table.parentNode.classList.contains("table-scroll")) { continue; }
+        var box = document.createElement("div");
+        box.className = "table-scroll";
+        // Scrollable regions need to be focusable, or a keyboard-only reader
+        // cannot reach the columns that are off the right edge.
+        box.setAttribute("tabindex", "0");
+        box.setAttribute("role", "region");
+        table.parentNode.insertBefore(box, table);
+        box.appendChild(table);
+      }
+
+      // 3 --------------------------------------------- heading anchors ---
+      var heads = document.querySelectorAll(".content h2[id], .content h3[id]");
+      for (var j = 0; j < heads.length; j++) {
+        var h = heads[j];
+        var a = document.createElement("a");
+        a.className = "anchor";
+        a.href = "#" + h.id;
+        a.setAttribute("aria-label", "Link to this section");
+        a.textContent = "#";
+        h.insertBefore(a, h.firstChild);
+      }
+
+      // The pages introduce their {:toc} with a bold "Contents" paragraph.
+      // Style it as the card's label rather than as body copy.
+      var toc = document.getElementById("markdown-toc");
+      if (toc) {
+        var prev = toc.previousElementSibling;
+        if (prev && prev.tagName === "P" &&
+            prev.textContent.trim().toLowerCase() === "contents") {
+          prev.id = "markdown-toc-heading";
+        }
+      }
+    })();
+  </script>
+</body>
+
+</html>

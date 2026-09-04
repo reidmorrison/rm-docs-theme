@@ -1,0 +1,76 @@
+{% comment %}
+  Document head.
+
+  Titles are built per page rather than hard-coded per site, which is a change
+  from the layouts this theme replaces: those set one <title> in the layout, so
+  every page of a site shipped the same title and description to search engines.
+  A page gets its own by adding `title:` and `description:` to its front matter;
+  until it does, it falls back to the site's.
+{% endcomment %}
+
+{%- capture site_title -%}
+  {%- if site.project.seo_title -%}
+    {{ site.project.seo_title }}
+  {%- else -%}
+    {{ site.project.name }}{% if site.project.tagline %} · {{ site.project.tagline }}{% endif %}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- assign page_title = page.title | default: nil -%}
+{%- assign description = page.description | default: site.project.description -%}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% if page_title %}{{ page_title }} · {{ site.project.name }}{% else %}{{ site_title | strip }}{% endif %}</title>
+  {%- if description %}
+  <meta name="description" content="{{ description | strip_newlines | strip }}">
+  {%- endif %}
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+  {%- comment -%}
+    The two theme-color values must track the --ground token in rm-docs.css.
+    They paint the browser chrome on mobile, which is the one surface CSS
+    custom properties cannot reach.
+  {%- endcomment %}
+  <meta name="theme-color" content="#F2F4F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E1319" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.project.name }}">
+  <meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}{{ site.project.name }}{% endif %}">
+  {%- if description %}
+  <meta property="og:description" content="{{ description | strip_newlines | strip }}">
+  {%- endif %}
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="{{ '/images/favicon.ico' | relative_url }}" sizes="any">
+  <link rel="apple-touch-icon" href="{{ '/images/apple-touch-icon.png' | relative_url }}">
+
+  {%- comment -%}
+    Same three families as reidmorrison.com, requested in one round trip:
+    Spectral for display, IBM Plex Sans for body, IBM Plex Mono for labels,
+    code and every syntax token. Every rule that names them also names a real
+    fallback stack, so a blocked font host degrades rather than breaks.
+  {%- endcomment %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Spectral:wght@600;700&display=swap">
+
+  <link rel="stylesheet" href="{{ '/assets/css/rm-docs.css' | relative_url }}">
+
+  {%- comment -%}
+    Escape hatch: a site that needs a handful of project-specific rules drops
+    them at docs/assets/css/project.css and they load last. Use it for one-off
+    figures and diagrams, never for anything the theme should be doing.
+  {%- endcomment %}
+  {%- if site.project.extra_css %}
+  <link rel="stylesheet" href="{{ site.project.extra_css | relative_url }}">
+  {%- endif %}
+
+  {%- if site.project.feed %}
+  <link rel="alternate" type="application/atom+xml" title="{{ site.project.name }}" href="{{ '/feed.xml' | relative_url }}">
+  {%- endif %}
+</head>

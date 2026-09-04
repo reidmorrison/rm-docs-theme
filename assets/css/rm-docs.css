@@ -1,0 +1,661 @@
+---
+# Front matter is required: it makes Jekyll process this file, which is how it
+# reaches _site. The file itself is plain CSS. There is deliberately no Sass:
+# GitHub Pages pins jekyll-sass-converter 1.5.2 (libsass, long dead), and
+# custom properties do everything the theme needs without a preprocessor.
+---
+
+/* ===========================================================================
+   rm-docs-theme
+
+   ONE stylesheet for every reidmorrison.com documentation site. The token
+   block is lifted from reidmorrison.com/stylesheets/site.css so the doc sites
+   and the commercial site share one palette, one type pairing and one shield.
+   What is NOT shared is the chrome: no commercial navigation, no entity
+   footer, no pricing. See CLAUDE.md, "What is shared and what is not".
+
+   Theme rules, in order, so all three viewer states resolve:
+     :root                                 complete light palette
+     @media (prefers-color-scheme:dark)    dark, unless light was chosen
+     :root[data-theme="dark"]              explicit dark wins either way
+   Never declare a colour only inside a media block.
+
+   Sections:
+     1  tokens
+     2  reset
+     3  masthead and wordmark
+     4  shell and sidebar
+     5  typography
+     6  in-page table of contents
+     7  tables
+     8  code blocks
+     9  syntax highlighting          <- the section that earns its keep
+     10 footer
+     11 print
+   =========================================================================== */
+
+/* ------------------------------------------------------------ 1 tokens --- */
+
+:root{
+  color-scheme:light;
+
+  /* Surfaces and ink, from reidmorrison.com. */
+  --ground:#F2F4F7; --surface:#FFFFFF; --surface-2:#E9EDF2;
+  --ink:#131A22; --ink-2:#3D4854; --ink-3:#6B7684;
+  --rule:#D3DAE3; --rule-2:#BFC8D4;
+  --accent:#1B4B7A; --accent-ink:#FFFFFF; --accent-soft:#DCE7F2;
+  --crit:#9E2A20; --crit-soft:#F7E2E0;
+  --warn:#8A5300; --warn-soft:#FAECD8;
+  --ok:#1A5C43;  --ok-soft:#DCEDE5;
+  --shadow:0 1px 2px rgba(19,26,34,.06),0 8px 24px -12px rgba(19,26,34,.18);
+
+  /* The shield's two fills. Any project mark dropped at _includes/logo.svg
+     reads these, so one file serves both themes. */
+  --logo-ink:#0D2547; --logo-accent:#4F8AB8;
+
+  /* Code surface. Deliberately theme-following rather than permanently dark:
+     these pages are half code, and dark slabs on a light ground read as a
+     zebra. The syntax palette below is designed against BOTH grounds. */
+  --code-bg:#F7F8FA; --code-rule:#DFE4EB; --code-inline:#E9EDF2;
+
+  /* Syntax palette. Its own token set, not the UI semantics: `crit` means
+     "this failed" in the interface and must not also mean "this is a class
+     name" in a code block. Hues are chosen to stay distinct at 13px. */
+  --syn-comment:#66707E;
+  --syn-keyword:#7A2E86;
+  --syn-string:#1A5C43;
+  --syn-symbol:#1B4B7A;
+  --syn-constant:#8A5300;
+  --syn-number:#8A5300;
+  --syn-func:#0F5C7A;
+  --syn-builtin:#7A2E86;
+  --syn-var:#A63A20;
+  --syn-operator:#3D4854;
+  --syn-punct:#6B7684;
+  --syn-escape:#A63A20;
+  --syn-tag:#0F5C7A;
+  --syn-error:#9E2A20;
+  --syn-diff-add:#DCEDE5;
+  --syn-diff-del:#F7E2E0;
+}
+
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0E1319; --surface:#161D26; --surface-2:#1E2731;
+    --ink:#E6EBF2; --ink-2:#B4BECB; --ink-3:#818D9C;
+    --rule:#28323E; --rule-2:#3A4654;
+    --accent:#7FB2E0; --accent-ink:#0E1319; --accent-soft:#1B2B3B;
+    --crit:#F0918A; --crit-soft:#33191A;
+    --warn:#E5B369; --warn-soft:#2E2415;
+    --ok:#7BC7A5;  --ok-soft:#12291F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+
+    /* The navy shield ink is 1.2:1 on this ground, so on dark BOTH fills
+       move to the light blue. Same conclusion topbar.css reached. */
+    --logo-ink:#7FB2E0; --logo-accent:#4F8AB8;
+
+    --code-bg:#10171F; --code-rule:#28323E; --code-inline:#1E2731;
+
+    --syn-comment:#7C8796;
+    --syn-keyword:#C79BE0;
+    --syn-string:#7BC7A5;
+    --syn-symbol:#7FB2E0;
+    --syn-constant:#E5B369;
+    --syn-number:#E5B369;
+    --syn-func:#6FC5DE;
+    --syn-builtin:#C79BE0;
+    --syn-var:#F0918A;
+    --syn-operator:#B4BECB;
+    --syn-punct:#818D9C;
+    --syn-escape:#F0918A;
+    --syn-tag:#6FC5DE;
+    --syn-error:#F0918A;
+    --syn-diff-add:#12291F;
+    --syn-diff-del:#33191A;
+  }
+}
+
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0E1319; --surface:#161D26; --surface-2:#1E2731;
+  --ink:#E6EBF2; --ink-2:#B4BECB; --ink-3:#818D9C;
+  --rule:#28323E; --rule-2:#3A4654;
+  --accent:#7FB2E0; --accent-ink:#0E1319; --accent-soft:#1B2B3B;
+  --crit:#F0918A; --crit-soft:#33191A;
+  --warn:#E5B369; --warn-soft:#2E2415;
+  --ok:#7BC7A5;  --ok-soft:#12291F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  --logo-ink:#7FB2E0; --logo-accent:#4F8AB8;
+  --code-bg:#10171F; --code-rule:#28323E; --code-inline:#1E2731;
+  --syn-comment:#7C8796;
+  --syn-keyword:#C79BE0;
+  --syn-string:#7BC7A5;
+  --syn-symbol:#7FB2E0;
+  --syn-constant:#E5B369;
+  --syn-number:#E5B369;
+  --syn-func:#6FC5DE;
+  --syn-builtin:#C79BE0;
+  --syn-var:#F0918A;
+  --syn-operator:#B4BECB;
+  --syn-punct:#818D9C;
+  --syn-escape:#F0918A;
+  --syn-tag:#6FC5DE;
+  --syn-error:#F0918A;
+  --syn-diff-add:#12291F;
+  --syn-diff-del:#33191A;
+}
+
+/* ------------------------------------------------------------- 2 reset --- */
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{
+  -webkit-text-size-adjust:100%;
+  /* Clears in-page anchor targets of nothing in particular now that the
+     masthead does not stick, but the sidebar's own sticky offset uses the
+     same figure, so they stay in step. */
+  scroll-padding-top:1.5rem;
+}
+
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+img{max-width:100%;height:auto}
+
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+
+/* Keyboard users land here first; it stays off-screen until focused. */
+.skip-link{
+  position:absolute;left:-9999px;top:0;z-index:200;
+  background:var(--accent);color:var(--accent-ink);
+  padding:10px 16px;border-radius:0 0 4px 0;font-weight:600;font-size:14px;
+}
+.skip-link:focus{left:0}
+
+/* --------------------------------------------------- 3 masthead + mark --- */
+
+.masthead{
+  background:var(--surface);
+  border-bottom:1px solid var(--rule);
+}
+
+.masthead-inner{
+  max-width:1240px;margin:0 auto;padding:18px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px 28px;flex-wrap:wrap;
+}
+
+/* The wordmark repeats the reidmorrison.com construction exactly: shield to
+   the left, OUTSIDE the 2px rule; project name in Spectral over that rule;
+   tagline in letterspaced mono beneath it. That is the whole of the shared
+   identity on a doc site, and it is enough to read as one hand. */
+.brand{
+  display:inline-flex;align-items:center;gap:13px;
+  line-height:1;text-decoration:none;color:inherit;
+}
+.brand:hover{text-decoration:none}
+
+.brand-mark{
+  flex:0 0 auto;
+  width:auto;height:clamp(38px,4.2vw,46px);
+  display:block;
+}
+
+.brand-type{display:inline-block}
+
+.brand-name{
+  display:block;
+  font-family:Spectral,Georgia,serif;font-weight:700;
+  font-size:clamp(21px,2.6vw,27px);line-height:1.1;
+  letter-spacing:-.015em;color:var(--ink);
+  border-bottom:2px solid var(--ink);padding-bottom:5px;
+}
+.brand:hover .brand-name{border-bottom-color:var(--accent)}
+
+.brand-tagline{
+  display:block;margin-top:6px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;
+}
+
+.masthead-links{
+  display:flex;align-items:center;gap:20px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:12px;letter-spacing:.06em;
+}
+.masthead-links a{color:var(--ink-2);text-decoration:none}
+.masthead-links a:hover{color:var(--accent);text-decoration:underline}
+
+@media (max-width:560px){
+  .brand-mark{height:34px}
+  .masthead-inner{padding:14px 18px}
+}
+
+/* --------------------------------------------------- 4 shell + sidebar --- */
+
+.shell{
+  max-width:1240px;margin:0 auto;padding:0 24px 80px;
+  display:grid;
+  grid-template-columns:232px minmax(0,1fr);
+  gap:0 44px;
+  align-items:start;
+}
+
+/* `minmax(0,1fr)` above and `min-width:0` here are both load-bearing: without
+   them a wide <pre> or table sets the column's base size and pushes the grid
+   past the viewport instead of scrolling inside its own container. */
+.content{min-width:0;padding-top:34px}
+
+.sidebar{
+  position:sticky;top:24px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  padding:34px 0 24px;
+  font-size:14.5px;
+}
+
+/* The nav is a <details> so the mobile disclosure is native: keyboard
+   accessible, no ARIA to maintain, and it degrades to "always open" with
+   JavaScript off. `open` ships in the markup; a small script in the layout
+   removes it below the breakpoint. */
+.nav[open] > summary,
+.nav > summary{
+  display:none;
+}
+
+.nav-group{margin:0 0 22px}
+.nav-group:last-child{margin-bottom:0}
+
+.nav-group-title{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;
+  margin:0 0 7px;padding:0 10px;
+}
+
+.nav-list{list-style:none;margin:0;padding:0}
+.nav-list li{margin:0}
+
+.nav-list a{
+  display:block;
+  padding:5px 10px;
+  border-radius:4px;
+  color:var(--ink-2);
+  text-decoration:none;
+  border-left:2px solid transparent;
+  line-height:1.4;
+}
+.nav-list a:hover{background:var(--surface-2);color:var(--ink)}
+
+/* Current page. The left bar rather than a fill: it reads at a glance in a
+   list of twelve without turning the sidebar into a block of colour. */
+.nav-list a.active{
+  color:var(--accent);font-weight:600;
+  border-left-color:var(--accent);
+  background:var(--accent-soft);
+}
+
+@media (max-width:900px){
+  .shell{
+    grid-template-columns:minmax(0,1fr);
+    gap:0;
+    padding:0 20px 64px;
+  }
+  .sidebar{
+    position:static;max-height:none;overflow:visible;
+    padding:18px 0 0;
+    border-bottom:1px solid var(--rule);
+  }
+  .content{padding-top:26px}
+
+  /* Below the breakpoint the summary becomes the control. */
+  .nav > summary{
+    display:flex;align-items:center;gap:8px;
+    list-style:none;cursor:pointer;
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+    font-weight:600;color:var(--accent);
+    padding:9px 10px;margin:0 0 6px;
+    border:1px solid var(--rule);border-radius:4px;
+    background:var(--surface);
+  }
+  .nav > summary::-webkit-details-marker{display:none}
+  .nav > summary::after{
+    content:"";
+    width:7px;height:7px;margin-left:auto;
+    border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+    transform:rotate(45deg) translate(-2px,-2px);
+  }
+  .nav[open] > summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
+  .nav[open] > summary{margin-bottom:14px}
+  .nav-body{padding-bottom:14px}
+}
+
+/* -------------------------------------------------------- 5 typography --- */
+
+.content > :first-child{margin-top:0}
+
+h1{
+  font-family:Spectral,Georgia,serif;font-weight:700;
+  font-size:clamp(29px,4vw,40px);line-height:1.1;
+  margin:0 0 6px;letter-spacing:-.018em;text-wrap:balance;
+  color:var(--ink);
+}
+
+h2{
+  font-family:Spectral,Georgia,serif;font-weight:700;font-size:26px;
+  line-height:1.2;margin:46px 0 12px;letter-spacing:-.012em;
+  text-wrap:balance;color:var(--ink);
+  padding-bottom:8px;border-bottom:1px solid var(--rule);
+}
+
+h3{
+  font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:18px;
+  margin:32px 0 8px;letter-spacing:.004em;text-wrap:balance;color:var(--ink);
+}
+
+h4{
+  font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:15.5px;
+  margin:26px 0 6px;color:var(--ink-2);
+}
+
+h5,h6{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:600;
+  font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+  margin:24px 0 6px;color:var(--ink-3);
+}
+
+/* Heading anchors: kramdown gives every heading an id, so a hover target
+   costs nothing and makes a 40-section page linkable. */
+.content h2,.content h3{position:relative}
+.content h2 .anchor,.content h3 .anchor{
+  position:absolute;left:-.85em;top:0;
+  opacity:0;text-decoration:none;color:var(--ink-3);font-weight:400;
+}
+.content h2:hover .anchor,.content h3:hover .anchor,
+.content .anchor:focus-visible{opacity:1}
+
+p{margin:0 0 16px}
+.content{max-width:none}
+.content p,.content li{max-width:76ch}
+
+ul,ol{margin:0 0 16px;padding-left:1.35rem}
+li{margin:0 0 6px}
+li > ul,li > ol{margin-top:6px}
+li::marker{color:var(--ink-3)}
+
+strong{font-weight:600}
+
+blockquote{
+  margin:0 0 18px;padding:2px 0 2px 18px;
+  border-left:3px solid var(--rule-2);
+  color:var(--ink-2);
+}
+blockquote > :last-child{margin-bottom:0}
+
+hr{border:0;border-top:1px solid var(--rule);margin:44px 0}
+
+/* ------------------------------------------------------- 6 in-page TOC --- */
+
+/* Every doc page carries a kramdown `{:toc}` block, which renders as
+   ul#markdown-toc. It sits in the markdown flow, so it is styled where it
+   stands rather than moved: a bordered card that reads as apparatus, not as
+   the first list of the article. */
+#markdown-toc{
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:5px;
+  padding:16px 20px 14px 36px;
+  margin:0 0 30px;
+  font-size:14.5px;
+  columns:2;
+  column-gap:34px;
+}
+#markdown-toc li{margin:0 0 4px;break-inside:avoid;max-width:none}
+#markdown-toc a{color:var(--ink-2);text-decoration:none}
+#markdown-toc a:hover{color:var(--accent);text-decoration:underline}
+#markdown-toc ul{margin:4px 0 6px;padding-left:1.1rem;columns:1}
+#markdown-toc ul a{color:var(--ink-3);font-size:13.5px}
+
+@media (max-width:700px){
+  #markdown-toc{columns:1}
+}
+
+/* Pages introduce the TOC with a bold "Contents" paragraph. Pull it onto the
+   card so the two read as one object. */
+#markdown-toc-heading{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;margin:0 0 8px;
+}
+
+/* ------------------------------------------------------------ 7 tables --- */
+
+/* Wrapped by the layout script so a wide table scrolls inside its own box and
+   the page body never scrolls sideways. */
+.table-scroll{
+  overflow-x:auto;
+  margin:0 0 22px;
+  border:1px solid var(--rule);
+  border-radius:5px;
+  background:var(--surface);
+}
+
+.content table{
+  border-collapse:collapse;
+  width:100%;
+  font-size:14.5px;
+  margin:0;
+}
+.table-scroll > table{min-width:520px}
+
+.content th,.content td{
+  padding:9px 14px;text-align:left;vertical-align:top;
+  border-bottom:1px solid var(--rule);
+}
+.content thead th{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;
+  background:var(--surface-2);
+  border-bottom:1px solid var(--rule-2);
+  white-space:nowrap;
+}
+.content tbody tr:last-child td{border-bottom:0}
+.content td > code{white-space:nowrap}
+
+/* -------------------------------------------------------- 8 code blocks --- */
+
+code,kbd,samp{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+
+/* Inline code. Sized in `em` so it tracks whatever it sits inside, including
+   headings and table cells. */
+:not(pre) > code{
+  font-size:.875em;
+  background:var(--code-inline);
+  color:var(--ink);
+  padding:.12em .36em;
+  border-radius:3px;
+  word-break:break-word;
+}
+a > code{color:inherit}
+
+/* Rouge wraps a fenced block as div.highlight > pre > code. kramdown with
+   no highlighter emits a bare pre > code. Both are styled. */
+.content pre,
+.content .highlight,
+.content .highlighter-rouge{
+  margin:0 0 22px;
+}
+
+.content pre{
+  background:var(--code-bg);
+  border:1px solid var(--code-rule);
+  border-radius:5px;
+  padding:14px 16px;
+  overflow-x:auto;
+  font-size:13.5px;
+  line-height:1.62;
+  color:var(--ink);
+  /* Tab characters in copied config default to 8 columns and wreck the
+     alignment of a nested YAML or Ruby hash. */
+  tab-size:2;
+}
+.content pre > code{
+  background:none;padding:0;border:0;font-size:inherit;color:inherit;
+  white-space:pre;
+}
+
+.content .highlight pre{margin:0}
+.content div.highlight{
+  border-radius:5px;
+  /* The inner pre carries the border; this clips its corners when a
+     horizontal scrollbar appears. */
+  overflow:hidden;
+}
+
+/* ------------------------------------------------ 9 syntax highlighting --- */
+
+/* This is the section reidmorrison.com's six illustrative rules could not
+   cover. The built doc HTML uses about twenty-five Rouge token classes; the
+   three highest-frequency ones after punctuation are symbols (ss), constants
+   (no) and hash labels (nl), which is 871 uses in semantic_logger alone and
+   exactly what a Ruby configuration example is made of. Every class Rouge
+   3.30 can emit for Ruby, YAML, ERB, shell, JSON and diff is mapped below;
+   anything unmapped inherits body ink and simply looks plain, never invisible.
+
+   Grouped by role rather than alphabetically, so adding a language means
+   finding the role, not scanning for a letter pair. */
+
+.highlight,.highlight pre{background:var(--code-bg)}
+
+/* comments */
+.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,
+.highlight .c1,.highlight .cs{color:var(--syn-comment);font-style:italic}
+.highlight .cp,.highlight .cpf{color:var(--syn-comment)}
+
+/* keywords */
+.highlight .k,.highlight .kd,.highlight .kn,
+.highlight .kp,.highlight .kr,.highlight .kv{color:var(--syn-keyword);font-weight:600}
+/* true / false / nil read as values, not as control flow */
+.highlight .kc{color:var(--syn-constant);font-weight:600}
+.highlight .kt{color:var(--syn-constant)}
+
+/* strings, and the delimiters and interpolation inside them */
+.highlight .s,.highlight .s1,.highlight .s2,.highlight .sb,.highlight .sc,
+.highlight .sd,.highlight .sh,.highlight .sx,.highlight .sa,
+.highlight .dl{color:var(--syn-string)}
+.highlight .se,.highlight .si{color:var(--syn-escape)}
+.highlight .sr{color:var(--syn-string);font-style:italic}
+
+/* symbols. The single most common coloured token on these pages. */
+.highlight .ss{color:var(--syn-symbol)}
+
+/* numbers */
+.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,
+.highlight .mi,.highlight .mo,.highlight .mx,.highlight .il{color:var(--syn-number)}
+
+/* names: constants and classes carry the most meaning in a Ruby example */
+.highlight .no{color:var(--syn-constant)}
+.highlight .nc{color:var(--syn-constant);font-weight:600}
+.highlight .nn{color:var(--syn-constant)}
+.highlight .ne{color:var(--syn-constant)}
+.highlight .nf,.highlight .fm{color:var(--syn-func)}
+.highlight .nb,.highlight .bp{color:var(--syn-builtin)}
+.highlight .nd{color:var(--syn-func);font-style:italic}
+/* hash labels: `level:` in a config block */
+.highlight .nl{color:var(--syn-symbol)}
+.highlight .na,.highlight .py{color:var(--syn-func)}
+.highlight .nt{color:var(--syn-tag);font-weight:600}
+.highlight .nv,.highlight .vc,.highlight .vg,
+.highlight .vi{color:var(--syn-var)}
+.highlight .ni{color:var(--syn-escape)}
+.highlight .n,.highlight .nx{color:var(--ink)}
+
+/* operators, punctuation, whitespace */
+.highlight .o,.highlight .ow{color:var(--syn-operator)}
+.highlight .p,.highlight .pi{color:var(--syn-punct)}
+.highlight .w{color:inherit}
+
+/* generic: diffs and shell transcripts */
+.highlight .gd{color:var(--crit);background:var(--syn-diff-del)}
+.highlight .gi{color:var(--ok);background:var(--syn-diff-add)}
+.highlight .ge{font-style:italic}
+.highlight .gs{font-weight:600}
+.highlight .gh,.highlight .gu{color:var(--syn-comment);font-weight:600}
+.highlight .gp{color:var(--syn-comment)}
+.highlight .gr,.highlight .gt{color:var(--syn-error)}
+.highlight .gl{text-decoration:underline}
+
+/* errors. A visible mark rather than a red block: an unlexable token is
+   usually our fence language being wrong, not the reader's problem. */
+.highlight .err,.highlight .x{color:var(--syn-error)}
+
+/* Line numbers, if a page ever turns them on. */
+.highlight .lineno,.highlight .gl{
+  color:var(--ink-3);
+  -webkit-user-select:none;user-select:none;
+  padding-right:14px;
+}
+
+/* ------------------------------------------------------------ 10 footer --- */
+
+.docs-footer{
+  border-top:1px solid var(--rule);
+  background:var(--surface);
+  margin-top:0;
+}
+
+.docs-footer-inner{
+  max-width:1240px;margin:0 auto;padding:22px 24px 30px;
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:10px 28px;flex-wrap:wrap;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11.5px;letter-spacing:.04em;
+  color:var(--ink-3);
+}
+.docs-footer-inner a{color:var(--ink-2);text-decoration:none}
+.docs-footer-inner a:hover{color:var(--accent);text-decoration:underline}
+.docs-footer-links{display:flex;gap:20px;flex-wrap:wrap}
+
+/* ------------------------------------------------------------- 11 print --- */
+
+@media print{
+  :root{
+    color-scheme:light;
+    --ground:#FFF; --surface:#FFF; --surface-2:#FFF;
+    --ink:#000; --ink-2:#222; --ink-3:#555;
+    --rule:#BBB; --rule-2:#999;
+    --code-bg:#FFF; --code-rule:#BBB; --code-inline:#FFF;
+  }
+  body{font-size:11pt}
+  .sidebar,.masthead-links,.skip-link,#markdown-toc{display:none}
+  .shell{display:block;max-width:none;padding:0}
+  .content{padding-top:0}
+  .content pre,.table-scroll{break-inside:avoid}
+  .content pre{white-space:pre-wrap;word-wrap:break-word}
+  .content h2,.content h3{break-after:avoid}
+  /* Print the destination of every outbound link, since a reader on paper
+     cannot follow one. Skipped for in-page anchors, which are noise. */
+  .content a[href^="http"]::after{
+    content:" (" attr(href) ")";
+    font-size:9pt;color:#555;word-break:break-all;
+  }
+}

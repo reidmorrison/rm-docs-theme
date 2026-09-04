@@ -1,0 +1,29 @@
+{% comment %}
+  One line, and the only place reidmorrison.com is named.
+
+  The rule these sites are built under: share the design system, never the
+  commercial chrome. Someone who wants to know who maintains the gem finds out
+  in one click; nobody is sold anything. There is no nav to the services or
+  contact pages, no corporate entity block, and no pricing on any documentation
+  site, and none of those should be added later. A doc site that sells
+  consulting reads to the Ruby community as a rug-pull risk on the gem itself,
+  and it would cost more credibility than it could generate leads.
+
+  If this ever needs re-arguing, the reasoning is in the business folder, not
+  here.
+{% endcomment %}
+<footer class="docs-footer">
+  <div class="docs-footer-inner">
+    <span>
+      {{ site.project.name }} is released under the
+      {{ site.project.license | default: 'Apache 2.0 License' }}.
+    </span>
+    <span class="docs-footer-links">
+      {%- if site.project.github %}
+      <a href="https://github.com/{{ site.project.github }}">Source</a>
+      <a href="https://github.com/{{ site.project.github }}/issues">Issues</a>
+      {%- endif %}
+      <a href="https://reidmorrison.com">Maintained by Reid Morrison</a>
+    </span>
+  </div>
+</footer>

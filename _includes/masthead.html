@@ -1,0 +1,48 @@
+{% comment %}
+  The masthead, and the whole of the shared identity on a documentation site.
+
+  It repeats the reidmorrison.com wordmark construction exactly: the shield to
+  the left and OUTSIDE the 2px rule, the project name in Spectral sitting on
+  that rule, the tagline in letterspaced mono beneath. Someone who reads a gem's
+  docs and later lands on reidmorrison.com should recognise one hand at work.
+  That recognition is the entire commercial value here, and it is why there is
+  no nav to /services, no entity block and no pricing anywhere on these sites.
+  See CLAUDE.md, "What is shared and what is not".
+
+  The mark comes from _includes/logo.svg. This theme ships the plain RM shield
+  as the default; a site with its own drops one at docs/_includes/logo.svg and
+  it wins, because Jekyll searches the site's _includes before the theme's.
+  The file must be inline SVG rather than an <img>: its fills read the
+  --logo-ink and --logo-accent custom properties, and an externally referenced
+  SVG cannot see the page's CSS.
+
+  Deliberately NOT sticky. On a page with forty sections, vertical room is
+  worth more than a persistent header, and the sidebar is what needs to stay
+  in view. The old layouts had a sticky header and a matching scroll-padding
+  script; both are gone.
+{% endcomment %}
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="brand" href="{{ '/index.html' | relative_url }}">
+      {% include logo.svg %}
+      <span class="brand-type">
+        <span class="brand-name">{{ site.project.name }}</span>
+        {%- if site.project.tagline %}
+        <span class="brand-tagline">{{ site.project.tagline }}</span>
+        {%- endif %}
+      </span>
+    </a>
+
+    <nav class="masthead-links" aria-label="Project links">
+      {%- if site.project.github %}
+      <a href="https://github.com/{{ site.project.github }}">GitHub</a>
+      {%- endif %}
+      {%- if site.project.gem %}
+      <a href="https://rubygems.org/gems/{{ site.project.gem }}">RubyGems</a>
+      {%- endif %}
+      {%- for link in site.project.links %}
+      <a href="{{ link.url }}">{{ link.label }}</a>
+      {%- endfor %}
+    </nav>
+  </div>
+</header>
