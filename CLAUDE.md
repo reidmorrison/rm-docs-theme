@@ -82,6 +82,16 @@ worth more than a persistent header, and the sidebar is what needs to stay in
 view. The old layouts had a sticky header and a JavaScript scroll-padding
 measurement to match; both are gone.
 
+**Mermaid is opt-in per page, not global.** The module is ~300KB, and only a
+handful of pages across six sites draw diagrams, so it loads when a page sets
+`mermaid: true`. Two details in `_includes/mermaid.html` are load-bearing and
+easy to lose: kramdown renders a `~~~mermaid` fence as a code block that must be
+unwrapped into a `<div class="mermaid">` before init, or the diagram source
+renders as literal text; and Mermaid picks its palette once at init and cannot
+read CSS custom properties, so the theme is resolved in JavaScript across the
+same three states the stylesheet uses. Hard-coding `neutral` leaves a white
+diagram glowing on the dark ground.
+
 **No hero art.** `header-rocket-256.png` and `header-banner.jpg` were copied
 into every repo and predate the shield. The masthead mark is the identity now.
 Removing the hero from a site's `index.md` is part of converting it.
@@ -150,6 +160,7 @@ staggered, which is what makes the moving tag tolerable.
 | `_includes/sidebar.html` | Grouped or flat navigation, detected from the first entry. |
 | `_includes/docs-footer.html` | One line. The only place `reidmorrison.com` is named. |
 | `_includes/logo.svg` | Default mark, the plain RM shield. A site overrides it with its own. |
+| `_includes/mermaid.html` | Diagram rendering, loaded only on pages with `mermaid: true`. |
 | `bin/preview` | Renders a real doc site against this working copy. The only way to see a site before this repo is public. |
 | `preview/` | That script's `Gemfile` and config overlay. |
 | `index.md` | Preview specimen. Does not reach consuming sites. |

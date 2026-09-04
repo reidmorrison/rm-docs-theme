@@ -217,6 +217,10 @@ git tag -f v1   && git push -f origin v1
 - **Wide tables and code blocks** that scroll inside their own container, so the
   page body never scrolls sideways.
 - **A print stylesheet** that drops the navigation and prints link destinations.
+- **Mermaid diagrams**, opt-in per page. Set `mermaid: true` in a page's front
+  matter and write `~~~mermaid` fences; the module is fetched only by pages that
+  ask for it, and it picks its light or dark palette from the resolved page
+  theme rather than hard-coding one.
 
 ## What it deliberately does not provide
 

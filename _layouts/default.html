@@ -105,6 +105,14 @@
       }
     })();
   </script>
+
+  {%- comment -%}
+    Opt-in per page via `mermaid: true` in front matter, so the module is only
+    fetched by pages that draw diagrams.
+  {%- endcomment %}
+  {%- if page.mermaid %}
+  {% include mermaid.html %}
+  {%- endif %}
 </body>
 
 </html>

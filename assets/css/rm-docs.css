@@ -553,6 +553,23 @@ a > code{color:inherit}
   overflow:hidden;
 }
 
+/* Mermaid diagrams, rendered by _includes/mermaid.html on pages that opt in.
+   Centred, and allowed to scroll rather than force the page sideways: a wide
+   flowchart is common and its SVG carries an intrinsic width. Mermaid paints
+   its own colours from the theme chosen at init, so nothing here sets any. */
+.mermaid{
+  margin:0 0 24px;
+  overflow-x:auto;
+  text-align:center;
+}
+.mermaid svg{max-width:100%;height:auto}
+
+/* Before the module runs, the fence is still a code block. Hiding it avoids a
+   flash of raw diagram source on a slow connection. If the module fails to
+   load the source stays hidden, which is a better failure than a wall of
+   graph syntax mid-article. */
+.language-mermaid{visibility:hidden}
+
 /* ------------------------------------------------ 9 syntax highlighting --- */
 
 /* This is the section reidmorrison.com's six illustrative rules could not
