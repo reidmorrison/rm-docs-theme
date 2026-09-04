@@ -1,0 +1,14 @@
+# Layered on top of a site's own _config.yml by bin/preview.
+#
+# `remote_theme` is emptied so jekyll-remote-theme skips: it resolves a tag
+# from GitHub, which either does not exist yet or is not the code being
+# worked on. `theme` then resolves the local path gem instead.
+#
+# This exercises the real Jekyll theme layering, including a site's _includes
+# winning over the theme's, which copying files into the site would not prove.
+remote_theme:
+theme: rm-docs-theme
+
+# Keeps absolute_url in the built HTML pointing at the preview server rather
+# than at production.
+url: "http://127.0.0.1:4000"

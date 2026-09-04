@@ -108,6 +108,8 @@ names are two-letter abbreviations; each line is a different token.
    Logger and Symmetric Encryption configuration rather than filler. `bundle
    exec jekyll serve`. Note that headless Chrome defaults to dark, so force the
    one you mean with a `data-theme` stamp on `<html>`.
+   **Then look at a real site**: `bin/preview ~/src/semantic_logger/docs`. The
+   specimen cannot catch everything a forty-section page does.
 2. **Check both themes properly.** Tokens resolve in three viewer states: bare
    `:root` is the complete light palette; `@media (prefers-color-scheme: dark)`
    is guarded as `:root:not([data-theme="light"])`; `:root[data-theme="dark"]`
@@ -131,8 +133,14 @@ pushes, or six Pages rebuilds through the API.
 | `_includes/sidebar.html` | Grouped or flat navigation, detected from the first entry. |
 | `_includes/docs-footer.html` | One line. The only place `reidmorrison.com` is named. |
 | `_includes/logo.svg` | Default mark, the plain RM shield. A site overrides it with its own. |
+| `bin/preview` | Renders a real doc site against this working copy. The only way to see a site before this repo is public. |
+| `preview/` | That script's `Gemfile` and config overlay. |
 | `index.md` | Preview specimen. Does not reach consuming sites. |
 | `_config.yml`, `Gemfile` | Preview scaffolding. Do not reach consuming sites. |
+
+Jekyll exposes only `_layouts`, `_includes`, `_sass` and `assets` from a theme,
+so everything else in this table is local tooling and cannot leak into a
+consuming site.
 
 ## Related
 

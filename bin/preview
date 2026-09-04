@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# Preview a documentation site against this working copy of the theme.
+#
+#   bin/preview ~/src/semantic_logger/docs
+#   bin/preview ~/src/semantic_logger/docs --port 4001
+#
+# Use this while converting a site, or while changing the theme. It is the
+# only supported way to see a site rendered before the theme repo is public:
+# a site's committed _config.yml names `remote_theme: reidmorrison/...@v1`,
+# and that tag does not resolve until the repo is pushed and tagged.
+#
+# Note: jekyll watches the SITE, not the theme. A theme edit needs a restart.
+
+set -euo pipefail
+
+theme_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if [ $# -lt 1 ]; then
+  echo "usage: bin/preview <path-to-docs-dir> [jekyll options...]" >&2
+  echo "example: bin/preview ~/src/semantic_logger/docs" >&2
+  exit 64
+fi
+
+site_dir="$1"
+shift
+
+if [ ! -f "$site_dir/_config.yml" ]; then
+  echo "error: no _config.yml in $site_dir" >&2
+  echo "point this at a site's docs directory, not its repo root" >&2
+  exit 66
+fi
+
+site_dir="$(cd "$site_dir" && pwd)"
+
+export BUNDLE_GEMFILE="$theme_dir/preview/Gemfile"
+bundle install --quiet
+
+# The destination sits inside the theme repo so a preview never writes into
+# the site's repo and cannot be committed there by accident.
+exec bundle exec jekyll serve \
+  --source      "$site_dir" \
+  --destination "$theme_dir/preview/_site" \
+  --config      "$site_dir/_config.yml,$theme_dir/preview/overlay.yml" \
+  "$@"

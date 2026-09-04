@@ -4,15 +4,41 @@ The shared Jekyll theme for the [reidmorrison.com](https://reidmorrison.com)
 documentation sites. One palette, one type pairing, one syntax sheet, one
 sidebar, across every gem's `docs/` folder.
 
-Preview it by running this repo on its own:
+## Previewing
+
+**A real doc site, against this working copy of the theme:**
+
+```bash
+bin/preview ~/src/semantic_logger/docs
+```
+
+Use this while converting a site, and while changing the theme. It is the only
+way to see a site rendered before this repo is public: a converted site's
+`_config.yml` names `remote_theme: reidmorrison/rm-docs-theme@v1`, and that tag
+does not resolve until this repo is pushed and tagged. Running plain `jekyll
+serve` against a converted site before then produces `Layout 'default' requested
+in api.md does not exist` and an unstyled page.
+
+The script pins its own `Gemfile`, resolves the theme as a path gem, and layers
+`preview/overlay.yml` over the site's config to swap `remote_theme` for a local
+`theme`. That exercises the real Jekyll theme layering, including a site's
+`_includes` winning over the theme's, which copying files into the site would
+not prove. It builds into `preview/_site` so it never writes into the site's
+repo. Pass any Jekyll option through: `bin/preview ~/src/iostreams/docs --port 4001`.
+
+Jekyll watches the site, not the theme, so a theme edit needs a restart.
+
+**The theme's own specimen page:**
 
 ```bash
 bundle install
 bundle exec jekyll serve
 ```
 
-`index.md` is a specimen page carrying one instance of everything the theme
-styles. Look at it in both light and dark before shipping a change.
+`index.md` carries one instance of everything the theme styles, set in real
+Semantic Logger and Symmetric Encryption configuration. Look at it in both light
+and dark before shipping a change. Headless Chrome defaults to dark, so force
+the one you mean with a `data-theme` stamp on `<html>`.
 
 ## Why a remote theme
 

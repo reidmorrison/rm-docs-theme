@@ -1,0 +1,11 @@
+# Local preview only. Never used by GitHub Pages, and never used by a consuming
+# site's own build: it exists so a doc site can be rendered against THIS
+# working copy of the theme before the theme repo is public and tagged.
+#
+# github-pages pins the exact Jekyll, kramdown and Rouge versions production
+# runs, so the preview cannot drift from it. The path gem is what lets
+# `theme: rm-docs-theme` resolve to the checkout one directory up.
+source "https://rubygems.org"
+
+gem "github-pages"
+gem "rm-docs-theme", path: ".."

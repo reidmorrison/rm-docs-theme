@@ -44,3 +44,5 @@ exclude:
   - LICENSE
   - vendor
   - rm-docs-theme.gemspec
+  - bin
+  - preview
