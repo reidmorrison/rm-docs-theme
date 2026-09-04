@@ -12,9 +12,17 @@
   The mark comes from _includes/logo.svg. This theme ships the plain RM shield
   as the default; a site with its own drops one at docs/_includes/logo.svg and
   it wins, because Jekyll searches the site's _includes before the theme's.
-  The file must be inline SVG rather than an <img>: its fills read the
+  That file must be inline SVG rather than an <img>: its fills read the
   --logo-ink and --logo-accent custom properties, and an externally referenced
   SVG cannot see the page's CSS.
+
+  A project whose identity is an ILLUSTRATION rather than a monogram sets
+  `project.mark_image` instead, and gets an <img>. Rocket Job's rocket is the
+  case this exists for: a detailed, full-colour drawing does not reduce to two
+  flat fills, so the custom-property trick has nothing to work with. The
+  tradeoff is that such a mark cannot respond to the theme, so it must be
+  legible on both grounds on its own. Check it against --surface in both
+  before shipping one.
 
   Deliberately NOT sticky. On a page with forty sections, vertical room is
   worth more than a persistent header, and the sidebar is what needs to stay
@@ -24,7 +32,11 @@
 <header class="masthead">
   <div class="masthead-inner">
     <a class="brand" href="{{ '/index.html' | relative_url }}">
+      {%- if site.project.mark_image %}
+      <img class="brand-mark" src="{{ site.project.mark_image | relative_url }}" alt="" aria-hidden="true">
+      {%- else %}
       {% include logo.svg %}
+      {%- endif %}
       <span class="brand-type">
         <span class="brand-name">{{ site.project.name }}</span>
         {%- if site.project.tagline %}

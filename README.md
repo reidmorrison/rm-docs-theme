@@ -114,6 +114,14 @@ Two requirements:
   externally referenced SVG cannot see the page's CSS.
 - It must carry `class="brand-mark"` and `aria-hidden="true"`.
 
+If the project's identity is an **illustration rather than a monogram**, set
+`project.mark_image: images/whatever.png` in `_config.yml` instead and skip the
+SVG. The theme then renders an `<img>`. A detailed full-colour drawing does not
+reduce to two flat fills, so the custom-property trick has nothing to work with.
+The tradeoff: such a mark cannot respond to the theme, so **check it against
+both grounds** before shipping one. Rocket Job's rocket is the case this exists
+for.
+
 **4. Remove the hero image from `index.md`, if there is one.**
 
 The theme has no hero slot. The masthead mark is the identity.
@@ -132,6 +140,7 @@ The theme has no hero slot. The masthead mark is the identity.
 | `gem` | no | Gem name. Renders the RubyGems link |
 | `license` | no | Footer text. Defaults to `Apache 2.0 License` |
 | `links` | no | Extra masthead links: a list of `{ label:, url: }` |
+| `mark_image` | no | Path to a raster mark, used instead of `_includes/logo.svg`. For illustrations that cannot be two flat fills |
 | `extra_css` | no | Path to a site-local stylesheet, loaded last |
 | `feed` | no | Truthy to advertise `/feed.xml` |
 

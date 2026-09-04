@@ -232,6 +232,11 @@ a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
   display:block;
 }
 
+/* A raster mark (project.mark_image) shares the class, so it is sized by the
+   rule above. It needs its own width reset because img{max-width:100%} in the
+   reset would otherwise fight the auto width on a narrow viewport. */
+img.brand-mark{max-width:none;object-fit:contain}
+
 .brand-type{display:inline-block}
 
 .brand-name{
