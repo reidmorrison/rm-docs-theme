@@ -70,6 +70,13 @@ git rm -r docs/_layouts docs/stylesheets docs/javascripts
 ```yaml
 remote_theme: reidmorrison/rm-docs-theme@v1
 
+# GitHub Pages enables jekyll-remote-theme on its own, but a local
+# `bundle exec jekyll build` does not: Jekyll only auto-requires gems in the
+# :jekyll_plugins bundler group. Without this line a local build silently
+# skips the theme and reports "Layout 'default' does not exist".
+plugins:
+  - jekyll-remote-theme
+
 markdown: kramdown
 kramdown:
   toc_levels: "2..3"
