@@ -12,6 +12,25 @@
     {% include sidebar.html %}
 
     <main class="content" id="content">
+      {%- comment -%}
+        The page's h1.
+
+        The layouts this theme replaces put the PROJECT name in an <h1> in the
+        header, so all eleven pages of a site shared one h1 that never matched
+        the page, and the page's own title was an <h2>. Here the wordmark is
+        not a heading and the page owns its h1, so the document outline starts
+        where it should.
+
+        Two keys, the same split reidmorrison.com uses: `title` is the browser
+        title and the default heading; `heading` overrides the h1 where the tab
+        title and the displayed headline should differ. A page that sets
+        neither renders no h1 and keeps whatever heading its markdown carries,
+        which is what an unconverted page does.
+      {%- endcomment %}
+      {%- if page.heading or page.title %}
+      <h1 class="page-title">{{ page.heading | default: page.title }}</h1>
+      {%- endif %}
+
       {{ content }}
     </main>
   </div>

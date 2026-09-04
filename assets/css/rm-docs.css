@@ -357,6 +357,11 @@ h1{
   color:var(--ink);
 }
 
+/* The page title, rendered by the layout from front matter. No rule beneath
+   it, deliberately: the h2s below it each carry one, and two weights of rule
+   stacked at the top of a page read as a mistake. Size does the separating. */
+.page-title{margin:0 0 20px}
+
 h2{
   font-family:Spectral,Georgia,serif;font-weight:700;font-size:26px;
   line-height:1.2;margin:46px 0 12px;letter-spacing:-.012em;
