@@ -94,8 +94,7 @@ nav:
       - { page: appenders.html, label: Appenders }
 ```
 
-Pin a tag, not a branch. A push to this repo then cannot change six sites at
-once; you bump each site's pin when you are ready to look at it.
+Pin a tag, not a branch. See "Releases" for what `@v1` means.
 
 **3. Add the project mark, if it has one.**
 
@@ -165,6 +164,36 @@ layout: default
 title: Appenders
 description: Where Semantic Logger writes to, and how to configure each destination.
 ---
+```
+
+## Releases
+
+**`v1` is a moving major tag**, the same convention GitHub Actions uses for
+`actions/checkout@v4`. Sites pin `@v1` and pick up fixes on their next build.
+Every release also gets an immutable point tag (`v1.0.0`, `v1.1.0`) that never
+moves, so a site can pin exactly, and rolling back is changing one line.
+
+The alternative was immutable pins everywhere, which sounds safer and is worse
+here: with six sites and one maintainer, a one-line CSS fix would need six
+commits across six repos. That is the same per-repo chore that produced the
+drift this theme exists to remove, so it would not survive contact with a busy
+week.
+
+Two things make the moving tag safe enough:
+
+- **Propagation is lazy.** A theme push does not touch a live site. Pages only
+  rebuilds a site when that site is pushed, so a bad theme change reaches sites
+  one at a time, as they happen to be touched, not all six at once.
+- **Breaking changes go to `v2`.** Anything that would need a site to change
+  its `_config.yml` or its markdown is a new major tag, and sites opt in by
+  bumping their own pin. Renaming a `project` or `nav` key is breaking.
+  Restyling is not.
+
+To cut a release:
+
+```bash
+git tag v1.2.0 && git push origin v1.2.0
+git tag -f v1   && git push -f origin v1
 ```
 
 ## What the theme provides

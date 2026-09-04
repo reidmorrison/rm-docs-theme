@@ -45,8 +45,16 @@ considered decision, not an oversight to fix. Say so before doing it.
 **Delivery is `remote_theme`, tag-pinned.** `jekyll-remote-theme 0.4.3` ships
 inside `github-pages 232`, which every consuming site already runs, so this
 works on the classic Pages builder with no Actions workflow, no Gemfile change
-and no gem release. Sites pin a tag (`@v1`), never a branch, so a push here
-cannot change six live sites at once.
+and no gem release.
+
+**`v1` is a moving major tag**, the GitHub Actions convention. Sites pin `@v1`
+and pick up fixes on their next build; every release also gets an immutable
+point tag for exact pinning and rollback. Immutable pins everywhere would mean
+six commits across six repos for a one-line CSS fix, which is the same chore
+that produced the drift this theme removes. Breaking changes, meaning anything
+that requires a site to edit its `_config.yml` or its markdown, go to `v2` and
+sites opt in. See README.md, "Releases", including the two-command release
+recipe.
 
 **No Sass.** GitHub Pages pins `jekyll-sass-converter 1.5.2`, which is libsass
 and long dead. Custom properties do everything the theme needs. `rm-docs.css` is
@@ -115,12 +123,21 @@ names are two-letter abbreviations; each line is a different token.
    is guarded as `:root:not([data-theme="light"])`; `:root[data-theme="dark"]`
    wins either way. Never declare a colour only inside a media block. Any new
    token needs a value in all three.
-3. **Tag a release.** Sites pin tags. An untagged push changes nothing anywhere,
-   which is the point.
-4. **Bump one site's pin and look at it** before bumping the rest.
+3. **Cut a release.** An untagged push reaches nothing: sites resolve `v1`, so
+   a change is not live until `v1` is moved onto it.
 
-A theme change does not reach a site until that site rebuilds. Six trivial
-pushes, or six Pages rebuilds through the API.
+   ```bash
+   git tag v1.2.0 && git push origin v1.2.0
+   git tag -f v1   && git push -f origin v1
+   ```
+
+4. **Look at one site before moving `v1`.** `bin/preview` renders against the
+   working copy, so this costs nothing and is the last chance to catch a
+   regression before six sites inherit it.
+
+A theme change still does not reach a site until that site rebuilds, and Pages
+only rebuilds a site when that site is pushed. So propagation is lazy and
+staggered, which is what makes the moving tag tolerable.
 
 ## Repo map
 
