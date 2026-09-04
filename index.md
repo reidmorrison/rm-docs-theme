@@ -1,10 +1,8 @@
 ---
 layout: default
-title: Specimen
+title: Theme specimen
 description: Every element the theme styles, on one page, for checking a change before it ships to six sites.
 ---
-
-# Theme specimen
 
 This page exists to be looked at. It carries one instance of everything the
 theme styles, so a change to `assets/css/rm-docs.css` can be checked in both
