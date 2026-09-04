@@ -43,3 +43,4 @@ exclude:
   - CLAUDE.md
   - LICENSE
   - vendor
+  - rm-docs-theme.gemspec
