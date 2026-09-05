@@ -104,9 +104,11 @@ also mean "this is a class name" in a code block.
 
 ## The syntax sheet is the part that earns its keep
 
-`reidmorrison.com/stylesheets/site.css` styles code with six rules written to
-make a handful of illustrative snippets look right. The built doc HTML uses
-about twenty-five Rouge token classes. The three highest-frequency coloured
+Until 2026-09-05 `reidmorrison.com/stylesheets/site.css` styled code with six
+rules, written to make a handful of illustrative snippets look right. It now
+includes this repo's sheet instead, so the argument below is settled and the
+sheet has one home. The built doc HTML uses about twenty-five Rouge token
+classes. The three highest-frequency coloured
 tokens after punctuation are **symbols (`ss`), constants (`no`) and hash labels
 (`nl`)** — 871 uses in `semantic_logger` alone — and the six-rule sheet covers
 none of them. A straight port would render the most characteristic part of every
@@ -118,6 +120,25 @@ unmapped inherits body ink, so a new language looks plain but never invisible.
 
 **Do not simplify this section.** It looks repetitive because Rouge's class
 names are two-letter abbreviations; each line is a different token.
+
+**The design system is three includable partials, and reidmorrison.com is the
+seventh site (2026-09-05).** `_includes/css/tokens.css`, `css/code.css` and
+`css/syntax.css` hold the palette, the code treatment and the Rouge sheet;
+`assets/css/rm-docs.css` includes them, and so does
+`reidmorrison.com/stylesheets/site.css`, which resolves this repo as a
+`remote_theme` for that purpose alone. It takes no layout, no include and no
+navigation from here; it keeps its own shell, its own sticky top bar and its own
+page styles.
+
+This closes the last direction of drift. The tokens were designed on the
+commercial site and copied here on 2026-09-04, which meant a colour had to be
+changed twice. Now there is one file. Two things follow:
+
+- **Edits to those three files reach a buyer-facing site.** Everything else in
+  this repo reaches documentation only.
+- **Anything scoped to a doc-site-only class stays out of them.** Mermaid is the
+  worked example: it sits in `rm-docs.css` right after the `css/code.css`
+  include rather than inside it, because the commercial site has no diagrams.
 
 ## Changing the theme safely
 
@@ -141,9 +162,11 @@ names are two-letter abbreviations; each line is a different token.
    git tag -f v1   && git push -f origin v1
    ```
 
-4. **Look at one site before moving `v1`.** `bin/preview` renders against the
-   working copy, so this costs nothing and is the last chance to catch a
-   regression before six sites inherit it.
+4. **Look at one doc site AND at reidmorrison.com before moving `v1`.**
+   `bin/preview` renders a doc site against the working copy, so that half
+   costs nothing. The commercial site is the seventh consumer of the three
+   shared partials and the only one where a regression is in front of a buyer;
+   build it against this working copy the same way, with its `overlay.yml`.
 
 A theme change still does not reach a site until that site rebuilds, and Pages
 only rebuilds a site when that site is pushed. So propagation is lazy and
@@ -153,7 +176,10 @@ staggered, which is what makes the moving tag tolerable.
 
 | Path | Role |
 |---|---|
-| `assets/css/rm-docs.css` | The whole stylesheet. Eleven numbered sections; section 9 is the syntax sheet. |
+| `assets/css/rm-docs.css` | The whole stylesheet. Eleven numbered sections; three of them are includes. |
+| `_includes/css/tokens.css` | The palette, all three viewer states. **Shared with reidmorrison.com.** |
+| `_includes/css/code.css` | Code blocks and inline code, scoped to `.content`. **Shared with reidmorrison.com.** |
+| `_includes/css/syntax.css` | The Rouge sheet, the section that earns its keep. **Shared with reidmorrison.com.** |
 | `_layouts/default.html` | The only layout. Carries three progressive enhancements, all of which degrade safely with JavaScript off. |
 | `_includes/head.html` | Per-page titles and descriptions, fonts, Open Graph. |
 | `_includes/masthead.html` | The wordmark. The whole of the shared identity. |
@@ -175,6 +201,6 @@ consuming site.
 The business folder holds the research this theme came out of, including the
 measured drift across the six repos and the comparison of the five delivery
 mechanisms. `~/src/reidmorrison.com/CLAUDE.md` carries the commercial rules for
-the site this theme shares a palette with, and a note saying the doc sites keep
-their own look, which **this theme reverses** and which must be corrected there
-in the same pass.
+the site this theme shares a palette with; its note about the doc sites keeping
+their own look was corrected on 2026-09-04, and on 2026-09-05 that site became a
+consumer of the three CSS partials above.

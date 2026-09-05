@@ -8,3 +8,4 @@ vendor/
 preview/_site/
 preview/Gemfile.lock
 preview/.jekyll-cache/
+preview/_site_pm/

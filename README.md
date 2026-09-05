@@ -126,6 +126,34 @@ for.
 
 The theme has no hero slot. The masthead mark is the identity.
 
+## The three shared CSS partials
+
+`assets/css/rm-docs.css` does not write its own tokens, code-block rules or
+syntax sheet. Those three sections live in `_includes/css/` and are pulled in
+with `{% include %}`:
+
+| Include | What it holds |
+|---|---|
+| `css/tokens.css` | The palette in all three viewer states, the shield fills, the code surface, the syntax colours |
+| `css/code.css` | Code blocks and inline code, all scoped to `.content` |
+| `css/syntax.css` | Every Rouge class, in both themes |
+
+They are split out because **`reidmorrison.com` includes the same three files**.
+The commercial site keeps its own layouts, its own sticky top bar and its own
+page styles, and resolves this repo as a `remote_theme` purely to reach these
+partials. So the design system has one home and the chrome has seven, which is
+the arrangement `CLAUDE.md` describes.
+
+Consequences worth knowing before editing them:
+
+- **A colour changed in `css/tokens.css` changes the commercial site too.** It
+  is not a doc-site-only edit any more.
+- **Anything scoped to a doc-site-only class does not belong in these three.**
+  Mermaid is the worked example: it sits in `rm-docs.css`, immediately after the
+  `css/code.css` include, rather than inside it.
+- **A consuming site adds its own tokens after the include**, in its own three
+  theme blocks. `reidmorrison.com` does that for `--bar`.
+
 ## Configuration reference
 
 ### `project`
@@ -212,10 +240,17 @@ git tag v1.2.0 && git push origin v1.2.0
 git tag -f v1   && git push -f origin v1
 ```
 
+**Check `reidmorrison.com` before moving `v1`, not just a doc site.** Since
+2026-09-05 it consumes the three shared CSS partials, so it is the seventh site
+on the moving tag and the only one where a palette regression is in front of a
+buyer.
+
 ## What the theme provides
 
 - **A grouped sidebar** that takes twelve pages without anyone deciding which
   ones to cut. It collapses to a native `<details>` disclosure below 900px.
+- **The design system as three includable partials**, shared verbatim with
+  `reidmorrison.com`: tokens, code blocks, syntax.
 - **A full Rouge sheet.** Around twenty-five token classes, designed for both
   themes. Symbols, constants and hash labels are the three highest-frequency
   coloured tokens in Ruby configuration and all three are covered.

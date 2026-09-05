@@ -1,0 +1,94 @@
+/* ===========================================================================
+   Syntax highlighting: every Rouge class, in both themes.
+
+   SHARED with reidmorrison.com, which includes this file through
+   remote_theme. Until 2026-09-05 that site carried six illustrative rules of
+   its own, written for a handful of snippets, and a Ruby example rendered
+   better on a doc site than on the site selling Ruby work. There is now one
+   sheet.
+
+   The built doc HTML uses about twenty-five Rouge token classes; the three
+   highest-frequency ones after punctuation are symbols (ss), constants (no)
+   and hash labels (nl), which is 871 uses in semantic_logger alone and
+   exactly what a Ruby configuration example is made of. Every class Rouge
+   3.30 can emit for Ruby, YAML, ERB, shell, JSON and diff is mapped below;
+   anything unmapped inherits body ink and simply looks plain, never
+   invisible.
+
+   Grouped by role rather than alphabetically, so adding a language means
+   finding the role, not scanning for a letter pair. DO NOT simplify this: it
+   looks repetitive because Rouge's class names are two-letter abbreviations,
+   and each line is a different token.
+   =========================================================================== */
+
+.highlight,.highlight pre{background:var(--code-bg)}
+
+/* comments */
+.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,
+.highlight .c1,.highlight .cs{color:var(--syn-comment);font-style:italic}
+.highlight .cp,.highlight .cpf{color:var(--syn-comment)}
+
+/* keywords */
+.highlight .k,.highlight .kd,.highlight .kn,
+.highlight .kp,.highlight .kr,.highlight .kv{color:var(--syn-keyword);font-weight:600}
+/* true / false / nil read as values, not as control flow */
+.highlight .kc{color:var(--syn-constant);font-weight:600}
+.highlight .kt{color:var(--syn-constant)}
+
+/* strings, and the delimiters and interpolation inside them */
+.highlight .s,.highlight .s1,.highlight .s2,.highlight .sb,.highlight .sc,
+.highlight .sd,.highlight .sh,.highlight .sx,.highlight .sa,
+.highlight .dl{color:var(--syn-string)}
+.highlight .se,.highlight .si{color:var(--syn-escape)}
+.highlight .sr{color:var(--syn-string);font-style:italic}
+
+/* symbols. The single most common coloured token on these pages. */
+.highlight .ss{color:var(--syn-symbol)}
+
+/* numbers */
+.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,
+.highlight .mi,.highlight .mo,.highlight .mx,.highlight .il{color:var(--syn-number)}
+
+/* names: constants and classes carry the most meaning in a Ruby example */
+.highlight .no{color:var(--syn-constant)}
+.highlight .nc{color:var(--syn-constant);font-weight:600}
+.highlight .nn{color:var(--syn-constant)}
+.highlight .ne{color:var(--syn-constant)}
+.highlight .nf,.highlight .fm{color:var(--syn-func)}
+.highlight .nb,.highlight .bp{color:var(--syn-builtin)}
+.highlight .nd{color:var(--syn-func);font-style:italic}
+/* hash labels: `level:` in a config block */
+.highlight .nl{color:var(--syn-symbol)}
+.highlight .na,.highlight .py{color:var(--syn-func)}
+.highlight .nt{color:var(--syn-tag);font-weight:600}
+.highlight .nv,.highlight .vc,.highlight .vg,
+.highlight .vi{color:var(--syn-var)}
+.highlight .ni{color:var(--syn-escape)}
+.highlight .n,.highlight .nx{color:var(--ink)}
+
+/* operators, punctuation, whitespace */
+.highlight .o,.highlight .ow{color:var(--syn-operator)}
+.highlight .p,.highlight .pi{color:var(--syn-punct)}
+.highlight .w{color:inherit}
+
+/* generic: diffs and shell transcripts */
+.highlight .gd{color:var(--crit);background:var(--syn-diff-del)}
+.highlight .gi{color:var(--ok);background:var(--syn-diff-add)}
+.highlight .ge{font-style:italic}
+.highlight .gs{font-weight:600}
+.highlight .gh,.highlight .gu{color:var(--syn-comment);font-weight:600}
+.highlight .gp{color:var(--syn-comment)}
+.highlight .gr,.highlight .gt{color:var(--syn-error)}
+.highlight .gl{text-decoration:underline}
+
+/* errors. A visible mark rather than a red block: an unlexable token is
+   usually our fence language being wrong, not the reader's problem. */
+.highlight .err,.highlight .x{color:var(--syn-error)}
+
+/* Line numbers, if a page ever turns them on. */
+.highlight .lineno,.highlight .gl{
+  color:var(--ink-3);
+  -webkit-user-select:none;user-select:none;
+  padding-right:14px;
+}
+

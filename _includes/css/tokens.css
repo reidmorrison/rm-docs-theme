@@ -1,0 +1,153 @@
+/* ===========================================================================
+   Design tokens: the palette, both themes, the shield fills, the code
+   surface and the syntax colours.
+
+   SHARED. This file is included by assets/css/rm-docs.css here and by
+   reidmorrison.com/stylesheets/site.css, which resolves it through
+   remote_theme. It is the ONE home for every colour in the family: the six
+   doc sites and the commercial site all read this block, so a colour changed
+   here changes everywhere on the next build of each site.
+
+   That is the reverse of how it started. These values were designed on
+   reidmorrison.com and copied here on 2026-09-04; the copy was folded back
+   into this single source on 2026-09-05. Nothing about the palette moved in
+   either step.
+
+   Three viewer states, in this order, and never a colour declared only in
+   the media block:
+     :root                                 complete light palette
+     @media (prefers-color-scheme:dark)    dark, unless light was chosen
+     :root[data-theme="dark"]              explicit dark wins either way
+
+   A consuming site adds its OWN tokens after including this, in its own
+   three blocks. reidmorrison.com does that for --bar, the translucent fill
+   behind its sticky top bar, which no doc site has.
+   =========================================================================== */
+
+:root{
+  color-scheme:light;
+
+  /* Surfaces and ink, from reidmorrison.com. */
+  --ground:#F2F4F7; --surface:#FFFFFF; --surface-2:#E9EDF2;
+  --ink:#131A22; --ink-2:#3D4854; --ink-3:#6B7684;
+  --rule:#D3DAE3; --rule-2:#BFC8D4;
+  --accent:#1B4B7A; --accent-ink:#FFFFFF; --accent-soft:#DCE7F2;
+  --crit:#9E2A20; --crit-soft:#F7E2E0;
+  --warn:#8A5300; --warn-soft:#FAECD8;
+  --ok:#1A5C43;  --ok-soft:#DCEDE5;
+  --shadow:0 1px 2px rgba(19,26,34,.06),0 8px 24px -12px rgba(19,26,34,.18);
+
+  /* The shield's two fills. Any project mark dropped at _includes/logo.svg
+     reads these, so one file serves both themes. */
+  --logo-ink:#0D2547; --logo-accent:#4F8AB8;
+
+  /* Code surface. Theme-following rather than permanently dark: these pages
+     are half code, and dark slabs on a light ground read as a zebra.
+
+     The panel is a RECESSED well, about 3.6 L* below the page ground. The
+     first version was #F7F8FA, which is 1.4 L* ABOVE the ground: it floated
+     instead of reading as a panel, and it was the palest thing on the page.
+     Measure any change to this in L*, not in contrast ratio, which is
+     meaningless between two pale colours. The white cards (--surface) are
+     raised and the code wells are sunk, so the two roles never read alike. */
+  --code-bg:#E4EAF3; --code-rule:#C8D3E2; --code-inline:#E4EAF3;
+
+  /* Syntax palette. Its own token set, not the UI semantics: `crit` means
+     "this failed" in the interface and must not also mean "this is a class
+     name" in a code block.
+
+     Every colour sits between 4.7 and 5.6 against the panel. That is a
+     deliberate ceiling, not a floor: the first palette ran 6 to 8.5, which is
+     how it ended up looking washed out. Past AA, more contrast on a light
+     ground buys nothing and costs all the chroma, because the only way to get
+     there is to drive every hue toward black. Hues are spread around the
+     wheel so no two adjacent token types collide: the first attempt had
+     symbols at #1B4B7A and function names at #0F5C7A, near-identical at
+     13.5px, which made a method call and a symbol argument indistinguishable.
+
+     Keep every value at or above 4.5. Check with the ratio, then look at it. */
+  --syn-comment:#59677C;   /* cool grey, italic, recedes            4.75 */
+  --syn-keyword:#9425A8;   /* purple   295°                         5.62 */
+  --syn-builtin:#7A3EAF;   /* violet   270°, keyword's neighbour    5.54 */
+  --syn-symbol:#1266C4;    /* blue     215°, the most common token  4.66 */
+  --syn-func:#006D7C;      /* teal     187°                         4.99 */
+  --syn-string:#0C7236;    /* green    145°                         5.00 */
+  --syn-constant:#9C5300;  /* amber     33°                         4.76 */
+  --syn-number:#9C5300;
+  --syn-var:#BB3814;       /* rust      15°                         4.71 */
+  --syn-escape:#BB3814;
+  --syn-tag:#006D7C;
+  --syn-error:#BE271B;
+  --syn-operator:#46546A;
+  --syn-punct:#59677F;
+  --syn-diff-add:#D3EADD;
+  --syn-diff-del:#F6DBD8;
+}
+
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0E1319; --surface:#161D26; --surface-2:#1E2731;
+    --ink:#E6EBF2; --ink-2:#B4BECB; --ink-3:#818D9C;
+    --rule:#28323E; --rule-2:#3A4654;
+    --accent:#7FB2E0; --accent-ink:#0E1319; --accent-soft:#1B2B3B;
+    --crit:#F0918A; --crit-soft:#33191A;
+    --warn:#E5B369; --warn-soft:#2E2415;
+    --ok:#7BC7A5;  --ok-soft:#12291F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+
+    /* The navy shield ink is 1.2:1 on this ground, so on dark BOTH fills
+       move to the light blue. Same conclusion topbar.css reached. */
+    --logo-ink:#7FB2E0; --logo-accent:#4F8AB8;
+
+    --code-bg:#10171F; --code-rule:#28323E; --code-inline:#1E2731;
+
+    --syn-comment:#7C8796;
+    --syn-keyword:#C79BE0;
+    --syn-string:#7BC7A5;
+    --syn-symbol:#7FB2E0;
+    --syn-constant:#E5B369;
+    --syn-number:#E5B369;
+    --syn-func:#6FC5DE;
+    --syn-builtin:#C79BE0;
+    --syn-var:#F0918A;
+    --syn-operator:#B4BECB;
+    --syn-punct:#818D9C;
+    --syn-escape:#F0918A;
+    --syn-tag:#6FC5DE;
+    --syn-error:#F0918A;
+    --syn-diff-add:#12291F;
+    --syn-diff-del:#33191A;
+  }
+}
+
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0E1319; --surface:#161D26; --surface-2:#1E2731;
+  --ink:#E6EBF2; --ink-2:#B4BECB; --ink-3:#818D9C;
+  --rule:#28323E; --rule-2:#3A4654;
+  --accent:#7FB2E0; --accent-ink:#0E1319; --accent-soft:#1B2B3B;
+  --crit:#F0918A; --crit-soft:#33191A;
+  --warn:#E5B369; --warn-soft:#2E2415;
+  --ok:#7BC7A5;  --ok-soft:#12291F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  --logo-ink:#7FB2E0; --logo-accent:#4F8AB8;
+  --code-bg:#10171F; --code-rule:#28323E; --code-inline:#1E2731;
+  --syn-comment:#7C8796;
+  --syn-keyword:#C79BE0;
+  --syn-string:#7BC7A5;
+  --syn-symbol:#7FB2E0;
+  --syn-constant:#E5B369;
+  --syn-number:#E5B369;
+  --syn-func:#6FC5DE;
+  --syn-builtin:#C79BE0;
+  --syn-var:#F0918A;
+  --syn-operator:#B4BECB;
+  --syn-punct:#818D9C;
+  --syn-escape:#F0918A;
+  --syn-tag:#6FC5DE;
+  --syn-error:#F0918A;
+  --syn-diff-add:#12291F;
+  --syn-diff-del:#33191A;
+}
+
