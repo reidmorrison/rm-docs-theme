@@ -38,7 +38,8 @@
   --shadow:0 1px 2px rgba(19,26,34,.06),0 8px 24px -12px rgba(19,26,34,.18);
 
   /* The shield's two fills. Any project mark dropped at _includes/logo.svg
-     reads these, so one file serves both themes. */
+     reads these, so one file serves both themes, and reidmorrison.com's own
+     shield reads them too. */
   --logo-ink:#0D2547; --logo-accent:#4F8AB8;
 
   /* Code surface. Theme-following rather than permanently dark: these pages
@@ -96,9 +97,15 @@
     --ok:#7BC7A5;  --ok-soft:#12291F;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
 
-    /* The navy shield ink is 1.2:1 on this ground, so on dark BOTH fills
-       move to the light blue. Same conclusion topbar.css reached. */
-    --logo-ink:#7FB2E0; --logo-accent:#4F8AB8;
+    /* The navy shield ink is 1.2:1 on this ground: not low contrast, absent.
+       So on dark both fills step up a rung, the ink to near-white and the
+       accent to the light blue that was the ink on light. Corrected
+       2026-09-05: this block used to read #7FB2E0/#4F8AB8, which claimed to
+       be "the same conclusion topbar.css reached" and was not. The same RM
+       shield rendered dimmer on three doc sites than on reidmorrison.com,
+       which is the drift this file exists to end. These are now the values
+       that were actually reasoned about. */
+    --logo-ink:#E3E9F1; --logo-accent:#7FB2E0;
 
     --code-bg:#10171F; --code-rule:#28323E; --code-inline:#1E2731;
 
@@ -131,7 +138,7 @@
   --warn:#E5B369; --warn-soft:#2E2415;
   --ok:#7BC7A5;  --ok-soft:#12291F;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
-  --logo-ink:#7FB2E0; --logo-accent:#4F8AB8;
+  --logo-ink:#E3E9F1; --logo-accent:#7FB2E0;
   --code-bg:#10171F; --code-rule:#28323E; --code-inline:#1E2731;
   --syn-comment:#7C8796;
   --syn-keyword:#C79BE0;

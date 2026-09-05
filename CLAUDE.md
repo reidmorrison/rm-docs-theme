@@ -140,6 +140,14 @@ changed twice. Now there is one file. Two things follow:
   worked example: it sits in `rm-docs.css` right after the `css/code.css`
   include rather than inside it, because the commercial site has no diagrams.
 
+**The shield's dark fills are #E3E9F1 over #7FB2E0 (corrected 2026-09-05).**
+The token block used to say #7FB2E0 over #4F8AB8 and claim it was the same
+conclusion `topbar.css` reached; it was not, so the same RM shield rendered
+dimmer on iostreams, secret_config and parallel_minion than on
+`reidmorrison.com`. The navy ink is 1.2:1 on the dark ground, which is absent
+rather than low contrast, so on dark both fills step up a rung. That site has
+dropped its own `.brand-mark` declarations and now reads these tokens.
+
 ## Changing the theme safely
 
 1. **Edit, then look at `index.md` in both themes.** It is a specimen page

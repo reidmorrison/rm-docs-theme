@@ -440,12 +440,30 @@ hr{border:0;border-top:1px solid var(--rule);margin:44px 0}
 /* ------------------------------------------------------------- 11 print --- */
 
 @media print{
-  :root{
+  /* All three viewer states, not bare :root. A reader who explicitly chose
+     dark carries :root[data-theme="dark"], which beats a bare :root at the
+     same specificity, so a single-selector reset printed the dark palette on
+     paper for exactly the people who set a preference. Fixed 2026-09-05;
+     reidmorrison.com's print block had the right form and this one did not.
+
+     The syntax tokens are restated for the same reason, at their light
+     values: a printed listing has to read the same for a dark-theme reader as
+     for a light-theme one, and colour still carries meaning on paper. Any
+     token added to _includes/css/tokens.css needs a line here. */
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
     color-scheme:light;
     --ground:#FFF; --surface:#FFF; --surface-2:#FFF;
     --ink:#000; --ink-2:#222; --ink-3:#555;
     --rule:#BBB; --rule-2:#999;
+    --logo-ink:#0D2547; --logo-accent:#4F8AB8;
     --code-bg:#FFF; --code-rule:#BBB; --code-inline:#FFF;
+
+    --syn-comment:#59677C; --syn-keyword:#9425A8; --syn-builtin:#7A3EAF;
+    --syn-symbol:#1266C4;  --syn-func:#006D7C;    --syn-string:#0C7236;
+    --syn-constant:#9C5300; --syn-number:#9C5300; --syn-var:#BB3814;
+    --syn-escape:#BB3814;  --syn-tag:#006D7C;     --syn-error:#BE271B;
+    --syn-operator:#46546A; --syn-punct:#59677F;
+    --syn-diff-add:#D3EADD; --syn-diff-del:#F6DBD8;
   }
   body{font-size:11pt}
   .sidebar,.masthead-links,.skip-link,#markdown-toc{display:none}
